@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSR | Final de la Copa Cruz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --azul-marino: #001a33;
+            --azul-oscuro: #003366;
+            --dorado: #d4af37;
+            --dorado-claro: #f8de7e;
+            --blanco: #ffffff;
+            --rojo: #e63946;
+            --verde: #2a9d8f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            color: var(--blanco);
+            background: linear-gradient(135deg, var(--azul-marino) 0%, var(--azul-oscuro) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 26, 51, 0.9);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--dorado);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--blanco);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .marcador {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            background: rgba(0, 51, 102, 0.7);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--dorado);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .equipo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .goles {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dorado);
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            color: var(--dorado-claro);
+            font-weight: 700;
+        }
+
+        .tarjetas {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .amarillas, .rojas {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        /* Sistema de pestañas */
+        .contenedor-pestanas {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .menu-pestanas {
+            display: flex;
+            margin-bottom: -1px;
+        }
+
+        .pestana {
+            padding: 1rem 2rem;
+            background: rgba(0, 26, 51, 0.7);
+            border: 1px solid var(--dorado);
+            border-bottom: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dorado-claro);
+            transition: all 0.3s;
+        }
+
+        .pestana:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .pestana:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .pestana.activa {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--blanco);
+        }
+
+        .contenido-pestanas {
+            background: rgba(0, 26, 51, 0.8);
+            border: 1px solid var(--dorado);
+            border-radius: 0 10px 10px 10px;
+            padding: 2rem;
+            min-height: 500px;
+        }
+
+        .contenido-pestana {
+            display: none;
+        }
+
+        #pestana-1:checked ~ .contenido-pestanas #contenido-1,
+        #pestana-2:checked ~ .contenido-pestanas #contenido-2,
+        #pestana-3:checked ~ .contenido-pestanas #contenido-3,
+        #pestana-4:checked ~ .contenido-pestanas #contenido-4,
+        #pestana-5:checked ~ .contenido-pestanas #contenido-5 {
+            display: block;
+        }
+
+        #pestana-1:checked ~ .menu-pestanas label[for="pestana-1"],
+        #pestana-2:checked ~ .menu-pestanas label[for="pestana-2"],
+        #pestana-3:checked ~ .menu-pestanas label[for="pestana-3"],
+        #pestana-4:checked ~ .menu-pestanas label[for="pestana-4"],
+        #pestana-5:checked ~ .menu-pestanas label[for="pestana-5"] {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--blanco);
+        }
+
+        /* Estilos para la narración */
+        .evento-partido {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--dorado);
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: aparecer 0.5s forwards;
+        }
+
+        @keyframes aparecer {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .minuto {
+            font-weight: 700;
+            color: var(--dorado);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .texto-evento {
+            color: var(--blanco);
+        }
+
+        .gol {
+            border-left-color: var(--verde);
+        }
+
+        .tarjeta-amarilla {
+            color: var(--dorado-claro);
+            font-weight: 700;
+        }
+
+        .tarjeta-roja {
+            color: var(--rojo);
+            font-weight: 700;
+        }
+
+        .falta {
+            color: #ff9e7d;
+            font-weight: 600;
+        }
+
+        /* Estilos para alineaciones */
+        .equipos-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .equipo-alineacion {
+            flex: 1;
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+        }
+
+        .equipo-alineacion h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--dorado);
+        }
+
+        .formacion {
+            font-size: 0.9rem;
+            color: var(--dorado-claro);
+        }
+
+        .equipo-alineacion ul {
+            list-style: none;
+        }
+
+        .equipo-alineacion li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .equipo-alineacion li::before {
+            content: "•";
+            color: var(--dorado);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Estilos para estadísticas */
+        .estadisticas-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .estadistica {
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+        }
+
+        .estadistica h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+        }
+
+        .barra-container {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .barra {
+            height: 100%;
+            background: var(--dorado);
+            border-radius: 10px;
+        }
+
+        .medanitum-info {
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .medanitum-info h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+        }
+
+        .asistencia {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dorado-claro);
+        }
+
+        /* Estilos para la sección de alineaciones */
+        .titulo-seccion {
+            color: #f8de7e;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .titulo-seccion::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #f8de7e, transparent);
+        }
+
+        .titulo-seccion i {
+            margin-right: 10px;
+        }
+
+        .subtitulo {
+            display: block;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        .alineaciones-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .equipo-card {
+            flex: 1;
+            background: rgba(0, 26, 51, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .equipo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .equipo-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            position: relative;
+            background: linear-gradient(135deg, rgba(0,40,80,0.9) 0%, rgba(0,20,40,0.9) 100%);
+        }
+
+        .equipo-card.local .equipo-header {
+            border-bottom: 3px solid #f8de7e;
+        }
+
+        .equipo-card.visitante .equipo-header {
+            border-bottom: 3px solid #e63946;
+        }
+
+        .escudo-container {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .escudo {
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+
+        .equipo-info {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .equipo-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .formacion-chip {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.2);
+            color: #f8de7e;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .resultado-chip {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .equipo-card.local .resultado-chip {
+            color: #f8de7e;
+        }
+
+        .equipo-card.visitante .resultado-chip {
+            color: #e63946;
+        }
+
+        .jugadores-container {
+            padding: 1.5rem;
+        }
+
+        .posicion-grupo {
+            margin-bottom: 1.5rem;
+        }
+
+        .posicion-titulo {
+            color: #f8de7e;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(248,222,126,0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .posicion-titulo i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        .jugador {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .jugador:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(5px);
+        }
+
+        .numero {
+            font-weight: 700;
+            color: #f8de7e;
+            min-width: 25px;
+            margin-right: 10px;
+        }
+
+        .nombre {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .nacionalidad {
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        .estadisticas-jugador {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+            font-size: 0.85rem;
+        }
+
+        .atajadas, .asistencias, .pases, .goles, .rating {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .atajadas {
+            background: rgba(42, 157, 143, 0.2);
+            color: #2a9d8f;
+        }
+
+        .asistencias {
+            background: rgba(64, 145, 224, 0.2);
+            color: #4091e0;
+        }
+
+        .pases {
+            background: rgba(106, 76, 147, 0.2);
+            color: #6a4c93;
+        }
+
+        .goles {
+            background: rgba(56, 176, 0, 0.2);
+            color: #38b000;
+        }
+
+        .rating {
+            background: rgba(212, 175, 55, 0.2);
+            color: #f8de7e;
+        }
+
+        .tarjeta {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .debut {
+            margin-left: 10px;
+            font-size: 0.8rem;
+            color: #a5d6a7;
+        }
+
+        /* Estados especiales */
+        .jugador.destacado {
+            background: linear-gradient(90deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-left: 3px solid #f8de7e;
+        }
+
+        .jugador.goleador {
+            background: linear-gradient(90deg, rgba(56,176,0,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-left: 3px solid #38b000;
+        }
+
+        .jugador.amonestado {
+            background: linear-gradient(90deg, rgba(230,57,70,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-left: 3px solid #e63946;
+        }
+
+        /* Leyenda */
+        .leyenda {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0,26,51,0.7);
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .icono {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+        }
+
+        .icono.goleador {
+            background: rgba(56,176,0,0.2);
+            color: #38b000;
+        }
+
+        .icono.amonestado {
+            background: rgba(230,57,70,0.2);
+            color: #e63946;
+        }
+
+        .icono.destacado {
+            background: rgba(212,175,55,0.2);
+            color: #f8de7e;
+        }
+
+        .icono.debut {
+            background: rgba(165,214,167,0.2);
+            color: #a5d6a7;
+        }
+
+        /* Estilos para Análisis */
+        .analisis-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .analisis-equipo {
+            background: rgba(0, 26, 51, 0.7);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--dorado);
+        }
+
+        .analisis-equipo.local {
+            border-left: 5px solid var(--dorado);
+        }
+
+        .analisis-equipo.visitante {
+            border-left: 5px solid var(--rojo);
+        }
+
+        .analisis-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--dorado);
+        }
+
+        .analisis-header h3 {
+            color: var(--dorado);
+            font-size: 1.3rem;
+        }
+
+        .analisis-claves h4 {
+            color: var(--dorado-claro);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analisis-claves ul {
+            list-style-position: inside;
+            padding-left: 1rem;
+        }
+
+        .analisis-claves li {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .analisis-conclusion {
+            background: rgba(0, 51, 102, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+            margin-top: 2rem;
+        }
+
+        .analisis-conclusion h4 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analisis-conclusion p {
+            line-height: 1.7;
+        }
+
+        /* Estilos para Entrevistas */
+        .entrevista-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .entrevista {
+            background: rgba(0, 26, 51, 0.7);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--dorado);
+        }
+
+        .entrevista-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .entrevista-header h3 {
+            color: var(--dorado);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .entrevista-header .jugador-info {
+            color: var(--dorado-claro);
+            font-style: italic;
+        }
+
+        .pregunta-respuesta {
+            margin-bottom: 1.5rem;
+        }
+
+        .pregunta {
+            color: var(--dorado-claro);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .respuesta {
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--dorado);
+        }
+
+        .frase-dt {
+            background: rgba(230, 57, 70, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--rojo);
+            margin-top: 2rem;
+            font-style: italic;
+            text-align: center;
+            position: relative;
+        }
+
+        .frase-dt::before {
+            content: "“";
+            font-size: 4rem;
+            color: rgba(230, 57, 70, 0.2);
+            position: absolute;
+            top: -1rem;
+            left: 1rem;
+            line-height: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .equipos-container, .estadisticas-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-pestanas {
+                flex-direction: column;
+            }
+            
+            .pestana {
+                border-radius: 0;
+                border-right: none;
+                border-left: none;
+            }
+
+            .alineaciones-container {
+                flex-direction: column;
+            }
+            
+            .equipo-card {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .equipo-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .escudo-container {
+                margin-bottom: 10px;
+       }
+            
+            .equipo-info {
+                padding: 0;
+            }
+            
+            .resultado-chip {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .equipo-card.visitante .equipo-header {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>NSR | Final de la Copa Cruz</h1>
+        </div>
+        <div class="partido-info">
+            <p class="fecha">15 de Mayo 2025 | Medanitum Arena</p>
+            <div class="marcador">
+                <div class="equipo local">
+                    <span>Medanito FC</span>
+                    <span class="goles" id="goles-local">3</span>
+                </div>
+                <div class="vs">VS</div>
+                <div class="equipo visitante">
+                    <span class="goles" id="goles-visitante">2</span>
+                    <span>Nova United</span>
+                </div>
+            </div>
+            <div class="tarjetas">
+                <div class="amarillas">
+                    <span class="tarjeta-icon">🟨</span>
+                    <span id="amarillas-local">2</span> - <span id="amarillas-visitante">3</span>
+                </div>
+                <div class="rojas">
+                    <span class="tarjeta-icon">🟥</span>
+                    <span id="rojas-local">0</span> - <span id="rojas-visitante">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="contenedor-pestanas">
+        <input type="radio" name="pestanas" id="pestana-1" checked>
+        <input type="radio" name="pestanas" id="pestana-2">
+        <input type="radio" name="pestanas" id="pestana-3">
+        <input type="radio" name="pestanas" id="pestana-4">
+        <input type="radio" name="pestanas" id="pestana-5">
+        
+        <nav class="menu-pestanas">
+            <label for="pestana-1" class="pestana activa">Narración</label>
+            <label for="pestana-2" class="pestana">Alineaciones</label>
+            <label for="pestana-3" class="pestana">Estadísticas</label>
+            <label for="pestana-4" class="pestana">Análisis</label>
+            <label for="pestana-5" class="pestana">Entrevistas</label>
+        </nav>
+        
+        <div class="contenido-pestanas">
+            <!-- Pestaña 1: Narración -->
+            <div class="contenido-pestana" id="contenido-1">
+                <div class="evento-partido" style="animation-delay: 0s">
+                    <p class="minuto">📌 Previa del Partido</p>
+                    <p class="texto-evento">El <strong>Medanitum Arena</strong> hierve con <strong>56,000 almas</strong> vestidas de <strong>azul marino y dorado</strong>, ondeando banderas al ritmo de tambores. Frente a ellos, el <strong>Nova United</strong> (rojo y blanco) despliega su juego de toques rápidos y movimientos sincronizados, liderados por su capitán <strong>Leonardo Silva</strong>.</p>
+                </div>
+
+                <!-- Eventos del partido con delays cronológicos (comienzan a las 14:00) -->
+                <div class="evento-partido" style="animation-delay: 2s">
+                    <p class="minuto">2'</p>
+                    <p class="texto-evento"><span class="falta">Falta</span> <strong>Ricardo "El Tanque" Ruiz (3)</strong> derriba a <strong>Elliot Cross (7)</strong> en una entrada durísima. <span class="tarjeta-amarilla">¡Amarilla para Ruiz!</span></p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 6s">
+                    <p class="minuto">6'</p>
+                    <p class="texto-evento"><strong>Brandt (17)</strong> dispara desde 20 metros... ¡<strong>Ramírez (12) vuela como un felino para despejar!</strong></p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 23s">
+                    <p class="minuto">23' ⚽</p>
+                    <p class="texto-evento"><strong>¡GOL DEL MEDANITO!</strong> <strong>El Arquitecto Laya (4)</strong> lanza un pase de 50 metros a <strong>El Chino Flores (9)</strong>, quien define cruzado. <strong class="marcador-actual">1-0</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 30s">
+                    <p class="minuto">30'</p>
+                    <p class="texto-evento"><strong>Kuznetsov (5)</strong> pisa a <strong>El Príncipe López (8)</strong>. <span class="tarjeta-amarilla">Amarilla para Kuznetsov</span>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 40s">
+                    <p class="minuto">40'</p>
+                    <p class="texto-evento"><strong>Silva (10)</strong> intenta un pase milimétrico, pero <strong>"La Sombra" Cortez (5)</strong> lo intercepta con una entrada perfecta.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 45s">
+                    <p class="minuto">45+1'</p>
+                    <p class="texto-evento"><strong>Resultado al descanso: Medanito 1 - 0 Nova United</strong></p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 55s">
+                    <p class="minuto">55' ⚽</p>
+                    <p class="texto-evento"><strong>¡Empate del Nova!</strong> <strong>Adrián López (11)</strong> regatea a <strong>Nieves (16)</strong> y centra para <strong>Sokolov (9)</strong>, que remata de chilena. <strong class="marcador-actual">1-1</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 60s">
+                    <p class="minuto">60'</p>
+                    <p class="texto-evento"><strong>Shaw (22)</strong> agarra a <strong>El Cometa Martínez (7)</strong>. <span class="tarjeta-amarilla">Amarilla para Shaw</span>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 68s">
+                    <p class="minuto">68' ⚽</p>
+                    <p class="texto-evento"><strong>¡Medanito responde!</strong> <strong>El Príncipe López (8)</strong> asiste a <strong>El Cometa Martínez (7)</strong>, que clava el balón en el ángulo. <strong class="marcador-actual">2-1</strong>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 75s">
+                    <p class="minuto">75' ⚽</p>
+                    <p class="texto-evento"><strong>¡Golazo de Brandt (17)!</strong> Tiro libre al ángulo superior. <strong class="marcador-actual">2-2</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 85s">
+                    <p class="minuto">85'</p>
+                    <p class="texto-evento"><strong>Sokolov (9)</strong> protesta al árbitro. <span class="tarjeta-amarilla">Amarilla para Sokolov</span>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 89s">
+                    <p class="minuto">89' ⚽</p>
+                    <p class="texto-evento"><strong>¡Penal para Medanito!</strong> <strong>Shaw (22)</strong> derriba a <strong>El Chino Flores (9)</strong>. <strong>El Fantasma López (11)</strong> convierte. <strong class="marcador-actual">3-2</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 94s">
+                    <p class="minuto">94'</p>
+                    <p class="texto-evento"><strong>Último ataque del Nova:</strong> <strong>Cross (7)</strong> centra, <strong>Sokolov (9)</strong> cabecea... ¡<strong>Ramírez (12) salva con la punta de los dedos!</strong></p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 95s">
+                    <p class="minuto">Final</p>
+                    <p class="texto-evento"><strong>¡Final del partido! Medanito FC gana 3-2, oyeron bien ¡MEDANITO ES CAMPEÓN DE LA COPA CRUZ! luego de 12 años de sequia.</strong></p>
+                </div>
+            </div>
+            
+            <!-- Pestaña 2: Alineaciones -->
+            <div class="contenido-pestana" id="contenido-2">
+                <h2 class="titulo-seccion">
+                    <i class="fas fa-users"></i> Alineaciones Oficiales
+                    <span class="subtitulo"> Final de la Copa Cruz - 15 Mayo 2025</span>
+                </h2>
+                
+                <div class="alineaciones-container">
+                    <!-- Equipo Local -->
+                    <div class="equipo-card local">
+                        <div class="equipo-header">
+                            <div class="escudo-container">
+                                <img src="img/medanito-logo.png" alt="Medanito FC" class="escudo">
+                            </div>
+                            <div class="equipo-info">
+                                <h3>Medanito FC</h3>
+                                <div class="formacion-chip">4-4-2 Diamante</div>
+                            </div>
+                            <div class="resultado-chip">3</div>
+                        </div>
+                        
+                        <div class="jugadores-container">
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-tshirt"></i> Portero
+                                </h4>
+                                <div class="jugador destacado">
+                                    <span class="numero">12</span>
+                                    <span class="nombre">Luis "El Muro" Ramírez</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="atajadas">5 atajadas</span>
+                                        <span class="rating">8.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-shield-alt"></i> Defensa
+                                </h4>
+                                <div class="jugador">
+                                    <span class="numero">4</span>
+                                    <span class="nombre">Jhon "El Arquitecto" Laya</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <span class="asistencias">1 asistencia</span>
+                                </div>
+                                <div class="jugador">
+                                    <span class="numero">6</span>
+                                    <span class="nombre">Adonys "El Toro" Laya</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                </div>
+                                <div class="jugador amonestado">
+                                    <span class="numero">3</span>
+                                    <span class="nombre">Ricardo "El Tanque" Ruiz</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <span class="tarjeta">🟨 2'</span>
+                                </div>
+                                <div class="jugador">
+                                    <span class="numero">16</span>
+                                    <span class="nombre">Jhon Nieves</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-arrows-alt"></i> Mediocampo
+                                </h4>
+                                <div class="jugador">
+                                    <span class="numero">5</span>
+                                    <span class="nombre">Ramón "La Sombra" Cortez</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                </div>
+                                <div class="jugador destacado">
+                                    <span class="numero">8</span>
+                                    <span class="nombre">Andrey "El Príncipe" López</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="asistencias">1 asistencia</span>
+                                        <span class="rating">8.0</span>
+                                    </div>
+                                </div>
+                                <div class="jugador goleador">
+                                    <span class="numero">7</span>
+                                    <span class="nombre">Eduardo "El Cometa" Martínez</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <span class="goles">1 ⚽ 68'</span>
+                                </div>
+                                <div class="jugador">
+                                    <span class="numero">18</span>
+                                    <span class="nombre">Ángelino "El Niño" Grabs</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <span class="debut">(Debut)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-bullseye"></i> Delantera
+                                </h4>
+                                <div class="jugador goleador">
+                                    <span class="numero">9</span>
+                                    <span class="nombre">Freddy "El Chino" Flores</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <span class="goles">1 ⚽ 23'</span>
+                                </div>
+                                <div class="jugador goleador destacado">
+                                    <span class="numero">11</span>
+                                    <span class="nombre">Richard "El Fantasma" López</span>
+                                    <span class="nacionalidad">🇻🇪</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="goles">1 ⚽ 89' (P)</span>
+                                        <span class="rating">8.2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Equipo Visitante -->
+                    <div class="equipo-card visitante">
+                        <div class="equipo-header">
+                            <div class="resultado-chip">2</div>
+                            <div class="equipo-info">
+                                <h3>Nova United</h3>
+                                <div class="formacion-chip">4-3-3</div>
+                            </div>
+                            <div class="escudo-container">
+                                <img src="img/nova-logo.png" alt="Nova United" class="escudo">
+                            </div>
+                        </div>
+                        
+                        <div class="jugadores-container">
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-tshirt"></i> Portero
+                                </h4>
+                                <div class="jugador">
+                                    <span class="numero">1</span>
+                                    <span class="nombre">Eduardo Santos</span>
+                                    <span class="nacionalidad">🇧🇷</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="atajadas">2 atajadas</span>
+                                        <span class="rating">6.8</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-shield-alt"></i> Defensa
+                                </h4>
+                                <div class="jugador">
+                                    <span class="numero">13</span>
+                                    <span class="nombre">Sergei Petrov</span>
+                                    <span class="nacionalidad">🇷🇺</span>
+                                </div>
+                                <div class="jugador">
+                                    <span class="numero">4</span>
+                                    <span class="nombre">Tobias Reinhardt</span>
+                                    <span class="nacionalidad">🇩🇪</span>
+                                </div>
+                                <div class="jugador">
+                                    <span class="numero">15</span>
+                                    <span class="nombre">Álvaro Ríos</span>
+                                    <span class="nacionalidad">🇪🇸</span>
+                                </div>
+                                <div class="jugador amonestado">
+                                    <span class="numero">22</span>
+                                    <span class="nombre">Connor Shaw</span>
+                                    <span class="nacionalidad">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                                    <span class="tarjeta">🟨 60'</span>
+                                    </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-arrows-alt"></i> Mediocampo
+                                </h4>
+                                <div class="jugador amonestado">
+                                    <span class="numero">5</span>
+                                    <span class="nombre">Pavel Kuznetsov</span>
+                                    <span class="nacionalidad">🇷🇺</span>
+                                    <span class="tarjeta">🟨 30'</span>
+                                </div>
+                                <div class="jugador destacado">
+                                    <span class="numero">10</span>
+                                    <span class="nombre">Leonardo Silva (C)</span>
+                                    <span class="nacionalidad">🇧🇷</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="pases">89% precisión</span>
+                                        <span class="rating">7.5</span>
+                                    </div>
+                                </div>
+                                <div class="jugador goleador destacado">
+                                    <span class="numero">17</span>
+                                    <span class="nombre">Felix Brandt</span>
+                                    <span class="nacionalidad">🇩🇪</span>
+                                    <div class="estadisticas-jugador">
+                                        <span class="goles">1 ⚽ 75'</span>
+                                        <span class="rating">8.3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="posicion-grupo">
+                                <h4 class="posicion-titulo">
+                                    <i class="fas fa-bullseye"></i> Delantera
+                                </h4>
+                                <div class="jugador">
+                                    <span class="numero">7</span>
+                                    <span class="nombre">Elliot Cross</span>
+                                    <span class="nacionalidad">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                                </div>
+                                <div class="jugador goleador amonestado">
+                                    <span class="numero">9</span>
+                                    <span class="nombre">Dmitry Sokolov</span>
+                                    <span class="nacionalidad">🇷🇺</span>
+                                    <span class="goles">1 ⚽ 55'</span>
+                                    <span class="tarjeta">🟨 85'</span>
+                                </div>
+                                <div class="jugador goleador">
+                                    <span class="numero">11</span>
+                                    <span class="nombre">Adrián López</span>
+                                    <span class="nacionalidad">🇪🇸</span>
+                                    <span class="asistencias">1 asistencia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="leyenda">
+                    <div class="leyenda-item"><span class="icono goleador">⚽</span> Goleador</div>
+                    <div class="leyenda-item"><span class="icono amonestado">🟨</span> Amonestado</div>
+                    <div class="leyenda-item"><span class="icono destacado">★</span> Destacado</div>
+                    <div class="leyenda-item"><span class="icono debut">👶</span> Debut</div>
+                </div>
+            </div>
+            
+            <!-- Pestaña 3: Estadísticas -->
+            <div class="contenido-pestana" id="contenido-3">
+                <h2 class="titulo-seccion">📊 Estadísticas del Partido</h2>
+                
+                <div class="estadisticas-container">
+                    <div class="estadistica">
+                        <h3>Posesión del Balón</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 52%"></div>
+                        </div>
+                        <p>Medanito FC: 52%</p>
+                        <p>Nova United: 48%</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Tiros al Arco</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 60%"></div>
+                        </div>
+                        <p>Medanito FC: 6 (3 a puerta)</p>
+                        <p>Nova United: 10 (5 a puerta)</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Faltas Cometidas</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 45%"></div>
+                        </div>
+                        <p>Medanito FC: 9</p>
+                        <p>Nova United: 12</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Tiros de Esquina</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 40%"></div>
+                        </div>
+                        <p>Medanito FC: 4</p>
+                        <p>Nova United: 6</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Offsides</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 30%"></div>
+                        </div>
+                        <p>Medanito FC: 2</p>
+                        <p>Nova United: 1</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Pases Completados</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 55%"></div>
+                        </div>
+                        <p>Medanito FC: 78%</p>
+                        <p>Nova United: 85%</p>
+                    </div>
+                </div>
+                
+                <div class="medanitum-info">
+                    <h3>Asistencia al Estadio</h3>
+                    <p class="asistencia">56,742 espectadores</p>
+                    <p>Récord de asistencia en la historia de la Copa Cruz</p>
+                </div>
+            </div>
+            
+            <!-- Pestaña 4: Análisis -->
+            <div class="contenido-pestana" id="contenido-4">
+                <h2 class="titulo-seccion">📊 Análisis Táctico Postpartido</h2>
+                
+                <div class="analisis-container">
+                    <!-- Equipo Local -->
+                    <div class="analisis-equipo local">
+                        <div class="analisis-header">
+                            <h3><i class="fas fa-chess-board"></i> Medanito FC: Corazón y Contragolpe</h3>
+                            <div class="formacion-chip">4-4-2 Diamante</div>
+                        </div>
+                        
+                        <div class="analisis-claves">
+                            <h4><i class="fas fa-key"></i> Claves del Éxito</h4>
+                            <ul>
+                                <li><strong>Bloque bajo y salida rápida:</strong> Solo <strong>38% de posesión</strong>, pero aprovecharon los espacios con pases largos de <strong>"El Arquitecto" Laya (4)</strong> y <strong>"El Príncipe" López (8)</strong>.</li>
+                                <li><strong>Transiciones letales:</strong> Los goles llegaron en contraataques (1º y 2º) y en balón parado (3º).</li>
+                                <li><strong>Marcaje agresivo:</strong> <strong>"El Toro" Laya (6)</strong> y <strong>Ruiz (3)</strong> anularon a <strong>Sokolov (9)</strong> y <strong>Brandt (17)</strong> en el área.</li>
+                                <li><strong>Doble '9' complementario:</strong> <strong>"El Chino" Flores (9)</strong> como referencia física + <strong>"El Fantasma" López (11)</strong> moviéndose entre líneas.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Equipo Visitante -->
+                    <div class="analisis-equipo visitante">
+                        <div class="analisis-header">
+                            <h3><i class="fas fa-chess-board"></i> Nova United: Dominio sin Puntería</h3>
+                            <div class="formacion-chip">4-3-3</div>
+                        </div>
+                        
+                        <div class="analisis-claves">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Errores Clave</h4>
+                            <ul>
+                                <li><strong>Falta de profundidad:</strong> Con <strong>62% de posesión</strong>, pero solo <strong>4/12 tiros al arco</strong>. Demasiado juego horizontal.</li>
+                                <li><strong>Vulnerabilidad en laterales:</strong> <strong>Shaw (22)</strong> y <strong>Petrov (13)</strong> sufrieron con la velocidad de <strong>"El Cometa" Martínez (7)</strong>.</li>
+                                <li><strong>Marcaje en zona fallido:</strong> El 2-1 fue un error de <strong>Reinhardt (4)</strong>, que no siguió a Martínez.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="analisis-conclusion">
+                        <h4><i class="fas fa-trophy"></i> Conclusión</h4>
+                        <p><strong>Medanito</strong> ganó por <strong>eficacia</strong> y corazón. <strong>Nova United</strong> necesita un <strong>delantero de área</strong> (Sokolov fue insuficiente) y ajustar su presión tras pérdida.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pestaña 5: Entrevistas -->
+            <div class="contenido-pestana" id="contenido-5">
+                <div class="entrevista-container">
+                    <div class="entrevista">
+                        <div class="entrevista-header">
+                            <h3>🎙️ Entrevista Postpartido</h3>
+                            <p class="jugador-info">Freddy "El Chino" Flores (Medanito FC) - 1 gol, 10.8 km recorridos</p>
+                        </div>
+                        
+                        <div class="pregunta-respuesta">
+                            <p class="pregunta">Reportero: ¡Freddy! Gol, penal provocado y 10.8 km recorridos. ¿Cómo viviste el partido?</p>
+                            <p class="respuesta">El Chino: "Fue guerra, hermano. Sabíamos que el Nova quería jugar bonito, pero nosotros vinimos a romperles el ritmo. ¡Y lo logramos! Esa chilena de Sokolov me dolió, pero el equipo respondió como león."</p>
+                        </div>
+                        
+                        <div class="pregunta-respuesta">
+                            <p class="pregunta">Reportero: ¿Qué sintió al marcar el 1-0 con ese control de pecho?</p>
+                            <p class="respuesta">El Chino: "Jhon Laya me tiró el pase y dije: 'Esta es mía'. La celebré como siempre, pa' mi gente en el barrio que me apoya. ¡El Chino no defrauda! (risas)"</p>
+                        </div>
+                        
+                        <div class="pregunta-respuesta">
+                            <p class="pregunta">Reportero: El penal decisivo… ¿Por qué no lo tiraste tú?</p>
+                            <p class="respuesta">El Chino: "Richard ('El Fantasma') es el killer ahí. Yo confié en él, y mirá… ¡clavó el balón como un héroe! Aunque en el vestuario le dije: 'Si la errás, te como vivo' (risas)."</p>
+                        </div>
+                        
+                        <div class="pregunta-respuesta">
+                            <p class="pregunta">Reportero: ¿Qué mensaje le mandás a la afición?</p>
+                            <p class="respuesta">El Chino: "Que esto no para. El Medanitum Arena es nuestra casa, y aquí no perdona nadie. ¡Próximo partido, más sangre y más goles!"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="frase-dt">
+                        <p>🎤 BONUS: Frase del DT del Nova United</p>
+                        <p>"Tuvimos control, pero nos faltó frialdad. Felicito al Medanito… aunque sabemos que la revancha será distinta."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
