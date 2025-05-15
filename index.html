@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrativa Sports Regional | El Clásico de la Cruz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Narración en vivo: Medanito FC vs Nova United - El Clásico de la Cruz 2025">
+</head>
+<body>
+    <!-- Cabecera con marcador -->
+    <header>
+        <div class="logo">
+            <h1>Narrativa Sports Regional</h1>
+        </div>
+        <div class="partido-info">
+            <p class="fecha">15 de Mayo 2025 | Estadio La Cruz</p>
+            <div class="marcador">
+                <div class="equipo local">
+                    <img src="img/medanito-logo.png" alt="Medanito FC" class="escudo">
+                    <span>Medanito FC</span>
+                    <span class="goles" id="goles-local">1</span>
+                </div>
+                <div class="vs">VS</div>
+                <div class="equipo visitante">
+                    <span class="goles" id="goles-visitante">0</span>
+                    <span>Nova United</span>
+                    <img src="img/nova-logo.png" alt="Nova United" class="escudo">
+                </div>
+            </div>
+            <div class="tarjetas">
+                <div class="amarillas">
+                    <span class="tarjeta-icon">🟨</span>
+                    <span id="amarillas-local">1</span> - <span id="amarillas-visitante">0</span>
+                </div>
+                <div class="rojas">
+                    <span class="tarjeta-icon">🟥</span>
+                    <span id="rojas-local">0</span> - <span id="rojas-visitante">1</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Narración del partido -->
+    <main>
+        <section class="narracion">
+            <h2>Minuto a Minuto ⚽</h2>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">1'</p>
+                <p class="texto-narracion">¡Comienza el Clásico de la Cruz! Medanito FC saca desde el centro del campo.</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">12'</p>
+                <p class="texto-narracion"><span class="falta">Falta</span> sobre el jugador #10 de Nova United. <span class="tarjeta-amarilla">Tarjeta amarilla</span> para Martínez (Medanito FC).</p>
+            </div>
+            
+            <div class="entrada-narracion gol">
+                <p class="minuto">25'</p>
+                <p class="texto-narracion">⚽ ¡GOOOOL de Medanito FC! Hernández remata al ángulo tras centro de García. <span class="marcador-actual">1-0</span>.</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">40'</p>
+                <p class="texto-narracion"><span class="falta">Falta dura</span> en el mediocampo. <span class="tarjeta-roja">Tarjeta roja</span> para Rodríguez (Nova United).</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">45+2'</p>
+                <p class="texto-narracion">Termina el primer tiempo. Medanito FC domina el partido.</p>
+            </div>
+            
+            <!-- Segundo tiempo -->
+            <div class="cambio-tiempo">
+                <p>SEGUNDO TIEMPO</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">63'</p>
+                <p class="texto-narracion"><span class="cambio">Cambio:</span> Entra López por Fernández (Medanito FC).</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">78'</p>
+                <p class="texto-narracion">¡Oportunidad clara! El delantero de Nova United dispara al poste.</p>
+            </div>
+            
+            <div class="entrada-narracion">
+                <p class="minuto">90+4'</p>
+                <p class="texto-narracion">¡Final del partido! Medanito FC gana 1-0 el Clásico de la Cruz.</p>
+            </div>
+        </section>
+        
+        <!-- Alineaciones -->
+        <section class="alineaciones">
+            <h3>📋 Alineaciones</h3>
+            <div class="equipos-container">
+                <div class="equipo-alineacion">
+                    <h4>Medanito FC</h4>
+                    <ul>
+                        <li>1. Ramírez (POR)</li>
+                        <li>4. Martínez <span class="tarjeta-icon">🟨</span></li>
+                        <li>5. García</li>
+                        <li>9. Hernández ⚽</li>
+                    </ul>
+                </div>
+                <div class="equipo-alineacion">
+                    <h4>Nova United</h4>
+                    <ul>
+                        <li>12. Ortega (POR)</li>
+                        <li>3. Rodríguez <span class="tarjeta-icon">🟥</span></li>
+                        <li>7. Silva</li>
+                        <li>11. Castro</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>© 2025 Narrativa Sports Regional - Todos los derechos reservados</p>
+        <p class="creditos">Desarrollado con pasión por el fútbol regional</p>
+    </footer>
+
+    <!-- Script para actualizar marcador (opcional) -->
+    <script>
+        // Ejemplo: Actualizar marcador manualmente
+        function actualizarMarcador(local, visitante) {
+            document.getElementById('goles-local').textContent = local;
+            document.getElementById('goles-visitante').textContent = visitante;
+        }
+    </script>
+</body>
+                  </html>
