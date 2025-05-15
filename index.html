@@ -4,134 +4,519 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Narrativa Sports Regional | El Clásico de la Cruz</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-    <meta name="description" content="Narración en vivo: Medanito FC vs Nova United - El Clásico de la Cruz 2025">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --azul-marino: #001a33;
+            --azul-oscuro: #003366;
+            --dorado: #d4af37;
+            --dorado-claro: #f8de7e;
+            --blanco: #ffffff;
+            --rojo: #e63946;
+            --verde: #2a9d8f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            color: var(--blanco);
+            background: linear-gradient(135deg, var(--azul-marino) 0%, var(--azul-oscuro) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 26, 51, 0.9);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--dorado);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--blanco);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .marcador {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            background: rgba(0, 51, 102, 0.7);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--dorado);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .equipo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .goles {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dorado);
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            color: var(--dorado-claro);
+            font-weight: 700;
+        }
+
+        .tarjetas {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .amarillas, .rojas {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        /* Sistema de pestañas */
+        .contenedor-pestanas {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .menu-pestanas {
+            display: flex;
+            margin-bottom: -1px;
+        }
+
+        .pestana {
+            padding: 1rem 2rem;
+            background: rgba(0, 26, 51, 0.7);
+            border: 1px solid var(--dorado);
+            border-bottom: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dorado-claro);
+            transition: all 0.3s;
+        }
+
+        .pestana:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .pestana:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .pestana.activa {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--blanco);
+        }
+
+        .contenido-pestanas {
+            background: rgba(0, 26, 51, 0.8);
+            border: 1px solid var(--dorado);
+            border-radius: 0 10px 10px 10px;
+            padding: 2rem;
+            min-height: 500px;
+        }
+
+        .contenido-pestana {
+            display: none;
+        }
+
+        #pestana-1:checked ~ .contenido-pestanas #contenido-1,
+        #pestana-2:checked ~ .contenido-pestanas #contenido-2,
+        #pestana-3:checked ~ .contenido-pestanas #contenido-3 {
+            display: block;
+        }
+
+        #pestana-1:checked ~ .menu-pestanas label[for="pestana-1"],
+        #pestana-2:checked ~ .menu-pestanas label[for="pestana-2"],
+        #pestana-3:checked ~ .menu-pestanas label[for="pestana-3"] {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--blanco);
+        }
+
+        /* Estilos para la narración */
+        .evento-partido {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--dorado);
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: aparecer 0.5s forwards;
+        }
+
+        @keyframes aparecer {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .minuto {
+            font-weight: 700;
+            color: var(--dorado);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .texto-evento {
+            color: var(--blanco);
+        }
+
+        .gol {
+            border-left-color: var(--verde);
+        }
+
+        .tarjeta-amarilla {
+            color: var(--dorado-claro);
+            font-weight: 700;
+        }
+
+        .tarjeta-roja {
+            color: var(--rojo);
+            font-weight: 700;
+        }
+
+        .falta {
+            color: #ff9e7d;
+            font-weight: 600;
+        }
+
+        /* Estilos para alineaciones */
+        .equipos-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .equipo-alineacion {
+            flex: 1;
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+        }
+
+        .equipo-alineacion h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--dorado);
+        }
+
+        .formacion {
+            font-size: 0.9rem;
+            color: var(--dorado-claro);
+        }
+
+        .equipo-alineacion ul {
+            list-style: none;
+        }
+
+        .equipo-alineacion li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .equipo-alineacion li::before {
+            content: "•";
+            color: var(--dorado);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Estilos para estadísticas */
+        .estadisticas-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .estadistica {
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+        }
+
+        .estadistica h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+        }
+
+        .barra-container {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .barra {
+            height: 100%;
+            background: var(--dorado);
+            border-radius: 10px;
+        }
+
+        .medanitum-info {
+            background: rgba(0, 26, 51, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dorado);
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .medanitum-info h3 {
+            color: var(--dorado);
+            margin-bottom: 1rem;
+        }
+
+        .asistencia {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dorado-claro);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .equipos-container, .estadisticas-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-pestanas {
+                flex-direction: column;
+            }
+            
+            .pestana {
+                border-radius: 0;
+                border-right: none;
+                border-left: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Cabecera con marcador -->
     <header>
         <div class="logo">
             <h1>Narrativa Sports Regional</h1>
         </div>
         <div class="partido-info">
-            <p class="fecha">15 de Mayo 2025 | Estadio La Cruz</p>
+            <p class="fecha">15 de Mayo 2025 | Medanitum Arena</p>
             <div class="marcador">
                 <div class="equipo local">
-                    <img src="img/medanito-logo.png" alt="Medanito FC" class="escudo">
                     <span>Medanito FC</span>
-                    <span class="goles" id="goles-local">1</span>
+                    <span class="goles" id="goles-local">3</span>
                 </div>
                 <div class="vs">VS</div>
                 <div class="equipo visitante">
-                    <span class="goles" id="goles-visitante">0</span>
+                    <span class="goles" id="goles-visitante">2</span>
                     <span>Nova United</span>
-                    <img src="img/nova-logo.png" alt="Nova United" class="escudo">
                 </div>
             </div>
             <div class="tarjetas">
                 <div class="amarillas">
                     <span class="tarjeta-icon">🟨</span>
-                    <span id="amarillas-local">1</span> - <span id="amarillas-visitante">0</span>
+                    <span id="amarillas-local">2</span> - <span id="amarillas-visitante">3</span>
                 </div>
                 <div class="rojas">
                     <span class="tarjeta-icon">🟥</span>
-                    <span id="rojas-local">0</span> - <span id="rojas-visitante">1</span>
+                    <span id="rojas-local">0</span> - <span id="rojas-visitante">0</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Narración del partido -->
-    <main>
-        <section class="narracion">
-            <h2>Minuto a Minuto ⚽</h2>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">1'</p>
-                <p class="texto-narracion">¡Comienza el Clásico de la Cruz! Medanito FC saca desde el centro del campo.</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">12'</p>
-                <p class="texto-narracion"><span class="falta">Falta</span> sobre el jugador #10 de Nova United. <span class="tarjeta-amarilla">Tarjeta amarilla</span> para Martínez (Medanito FC).</p>
-            </div>
-            
-            <div class="entrada-narracion gol">
-                <p class="minuto">25'</p>
-                <p class="texto-narracion">⚽ ¡GOOOOL de Medanito FC! Hernández remata al ángulo tras centro de García. <span class="marcador-actual">1-0</span>.</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">40'</p>
-                <p class="texto-narracion"><span class="falta">Falta dura</span> en el mediocampo. <span class="tarjeta-roja">Tarjeta roja</span> para Rodríguez (Nova United).</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">45+2'</p>
-                <p class="texto-narracion">Termina el primer tiempo. Medanito FC domina el partido.</p>
-            </div>
-            
-            <!-- Segundo tiempo -->
-            <div class="cambio-tiempo">
-                <p>SEGUNDO TIEMPO</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">63'</p>
-                <p class="texto-narracion"><span class="cambio">Cambio:</span> Entra López por Fernández (Medanito FC).</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">78'</p>
-                <p class="texto-narracion">¡Oportunidad clara! El delantero de Nova United dispara al poste.</p>
-            </div>
-            
-            <div class="entrada-narracion">
-                <p class="minuto">90+4'</p>
-                <p class="texto-narracion">¡Final del partido! Medanito FC gana 1-0 el Clásico de la Cruz.</p>
-            </div>
-        </section>
+    <div class="contenedor-pestanas">
+        <input type="radio" name="pestanas" id="pestana-1" checked>
+        <input type="radio" name="pestanas" id="pestana-2">
+        <input type="radio" name="pestanas" id="pestana-3">
         
-        <!-- Alineaciones -->
-        <section class="alineaciones">
-            <h3>📋 Alineaciones</h3>
-            <div class="equipos-container">
-                <div class="equipo-alineacion">
-                    <h4>Medanito FC</h4>
-                    <ul>
-                        <li>1. Ramírez (POR)</li>
-                        <li>4. Martínez <span class="tarjeta-icon">🟨</span></li>
-                        <li>5. García</li>
-                        <li>9. Hernández ⚽</li>
-                    </ul>
+        <nav class="menu-pestanas">
+            <label for="pestana-1" class="pestana activa">Narración</label>
+            <label for="pestana-2" class="pestana">Alineaciones</label>
+            <label for="pestana-3" class="pestana">Estadísticas</label>
+        </nav>
+        
+        <div class="contenido-pestanas">
+            <!-- Pestaña 1: Narración -->
+            <div class="contenido-pestana" id="contenido-1">
+                <div class="evento-partido" style="animation-delay: 0s">
+                    <p class="minuto">📌 Previa del Partido</p>
+                    <p class="texto-evento">El <strong>Medanitum Arena</strong> hierve con <strong>56,000 almas</strong> vestidas de <strong>azul marino y dorado</strong>, ondeando banderas al ritmo de tambores. Frente a ellos, el <strong>Nova United</strong> (rojo y blanco) despliega su juego de toques rápidos y movimientos sincronizados, liderados por su capitán <strong>Leonardo Silva</strong>.</p>
                 </div>
-                <div class="equipo-alineacion">
-                    <h4>Nova United</h4>
-                    <ul>
-                        <li>12. Ortega (POR)</li>
-                        <li>3. Rodríguez <span class="tarjeta-icon">🟥</span></li>
-                        <li>7. Silva</li>
-                        <li>11. Castro</li>
-                    </ul>
+
+                <!-- Eventos del partido con delays cronológicos (comienzan a las 14:00) -->
+                <div class="evento-partido" style="animation-delay: 2s">
+                    <p class="minuto">2'</p>
+                    <p class="texto-evento"><span class="falta">Falta</span> <strong>Ricardo "El Tanque" Ruiz (3)</strong> derriba a <strong>Elliot Cross (7)</strong> en una entrada durísima. <span class="tarjeta-amarilla">¡Amarilla para Ruiz!</span></p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 6s">
+                    <p class="minuto">6'</p>
+                    <p class="texto-evento"><strong>Brandt (17)</strong> dispara desde 20 metros... ¡<strong>Ramírez (12) vuela como un felino para despejar!</strong></p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 23s">
+                    <p class="minuto">23' ⚽</p>
+                    <p class="texto-evento"><strong>¡GOL DEL MEDANITO!</strong> <strong>El Arquitecto Laya (4)</strong> lanza un pase de 50 metros a <strong>El Chino Flores (9)</strong>, quien define cruzado. <strong class="marcador-actual">1-0</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 30s">
+                    <p class="minuto">30'</p>
+                    <p class="texto-evento"><strong>Kuznetsov (5)</strong> pisa a <strong>El Príncipe López (8)</strong>. <span class="tarjeta-amarilla">Amarilla para Kuznetsov</span>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 40s">
+                    <p class="minuto">40'</p>
+                    <p class="texto-evento"><strong>Silva (10)</strong> intenta un pase milimétrico, pero <strong>"La Sombra" Cortez (5)</strong> lo intercepta con una entrada perfecta.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 45s">
+                    <p class="minuto">45+1'</p>
+                    <p class="texto-evento"><strong>Resultado al descanso: Medanito 1 - 0 Nova United</strong></p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 55s">
+                    <p class="minuto">55' ⚽</p>
+                    <p class="texto-evento"><strong>¡Empate del Nova!</strong> <strong>Adrián López (11)</strong> regatea a <strong>Nieves (16)</strong> y centra para <strong>Sokolov (9)</strong>, que remata de chilena. <strong class="marcador-actual">1-1</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 60s">
+                    <p class="minuto">60'</p>
+                    <p class="texto-evento"><strong>Shaw (22)</strong> agarra a <strong>El Cometa Martínez (7)</strong>. <span class="tarjeta-amarilla">Amarilla para Shaw</span>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 68s">
+                    <p class="minuto">68' ⚽</p>
+                    <p class="texto-evento"><strong>¡Medanito responde!</strong> <strong>El Príncipe López (8)</strong> asiste a <strong>El Cometa Martínez (7)</strong>, que clava el balón en el ángulo. <strong class="marcador-actual">2-1</strong>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 75s">
+                    <p class="minuto">75' ⚽</p>
+                    <p class="texto-evento"><strong>¡Golazo de Brandt (17)!</strong> Tiro libre al ángulo superior. <strong class="marcador-actual">2-2</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 85s">
+                    <p class="minuto">85'</p>
+                    <p class="texto-evento"><strong>Sokolov (9)</strong> protesta al árbitro. <span class="tarjeta-amarilla">Amarilla para Sokolov</span>.</p>
+                </div>
+
+                <div class="evento-partido gol" style="animation-delay: 89s">
+                    <p class="minuto">89' ⚽</p>
+                    <p class="texto-evento"><strong>¡Penal para Medanito!</strong> <strong>Shaw (22)</strong> derriba a <strong>El Chino Flores (9)</strong>. <strong>El Fantasma López (11)</strong> convierte. <strong class="marcador-actual">3-2</strong>.</p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 94s">
+                    <p class="minuto">94'</p>
+                    <p class="texto-evento"><strong>Último ataque del Nova:</strong> <strong>Cross (7)</strong> centra, <strong>Sokolov (9)</strong> cabecea... ¡<strong>Ramírez (12) salva con la punta de los dedos!</strong></p>
+                </div>
+
+                <div class="evento-partido" style="animation-delay: 95s">
+                    <p class="minuto">Final</p>
+                    <p class="texto-evento"><strong>¡Final del partido! Medanito FC gana 3-2 el Clásico de la Cruz en un partido épico.</strong></p>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <!-- Pie de página -->
-    <footer>
-        <p>© 2025 Narrativa Sports Regional - Todos los derechos reservados</p>
-        <p class="creditos">Desarrollado con pasión por el fútbol regional</p>
-    </footer>
-
-    <!-- Script para actualizar marcador (opcional) -->
-    <script>
-        // Ejemplo: Actualizar marcador manualmente
-        function actualizarMarcador(local, visitante) {
-            document.getElementById('goles-local').textContent = local;
-            document.getElementById('goles-visitante').textContent = visitante;
-        }
-    </script>
-</body>
-                  </html>
+            
+            <!-- Pestaña 2: Alineaciones -->
+            <div class="contenido-pestana" id="contenido-2">
+                <h2 class="titulo-seccion">📋 Alineaciones Oficiales</h2>
+                
+                <div class="equipos-container">
+                    <div class="equipo-alineacion">
+                        <h3>🔵 Medanito FC <span class="formacion">(4-4-2 Diamante)</span></h3>
+                        <ul>
+                            <li><strong>Portero:</strong> 1. Luis "El Muro" Ramírez (12)</li>
+                            <li><strong>Defensas:</strong> 
+                                <br>2. Jhon "El Arquitecto" Laya (4)
+                                <br>3. Adonys "El Toro" Laya (6)
+                                <br>4. Ricardo "El Tanque" Ruiz (3) <span class="tarjeta-icon">🟨</span>
+                                <br>5. Jhon Nieves (16)</li>
+                            <li><strong>Mediocampistas:</strong>
+                                <br>6. Ramón "La Sombra" Cortez (5)
+                                <br>7. Andrey "El Príncipe" López (8)
+                                <br>8. Eduardo "El Cometa" Martínez (7) ⚽
+                                <br>9. Ángelino "El Niño" Grabs (18)</li>
+                            <li><strong>Delanteros:</strong>
+                                <br>10. Freddy "El Chino" Flores (9) ⚽
+                                <br>11. Richard "El Fantasma" López (11) ⚽</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="equipo-alineacion">
+                        <h3>🔴 Nova United <span class="formacion">(4-3-3)</span></h3>
+                        <ul>
+                            <li><strong>Portero:</strong> 1. Eduardo Santos (Brasil)</li>
+                            <li><strong>Defensas:</strong>
+                                <br>2. Sergei Petrov (13, Rusia)
+                                <br>3. Tobias Reinhardt (4, Alemania)
+                                <br>4. Álvaro Ríos (15, España)
+                                <br>5. Connor Shaw (22, Inglaterra) <span class="tarjeta-icon">🟨</span></li>
+                            <li><strong>Mediocampistas:</strong>
+                                <br>6. Pavel Kuznetsov (5, Rusia) <span class="tarjeta-icon">🟨</span>
+                                <br>7. Leonardo Silva (10, Brasil)
+                                <br>8. Felix Brandt (17, Alemania) ⚽</li>
+                            <li><strong>Delanteros:</strong>
+                                <br>9. Elliot Cross (7, Inglaterra)
+                                <br>10. Dmitry Sokolov (9, Rusia) ⚽ <span class="tarjeta-icon">🟨</span>
+                                <br>11. Adrián López (11, España) ⚽</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pestaña 3: Estadísticas -->
+            <div class="contenido-pestana" id="contenido-3">
+                <h2 class="titulo-seccion">📊 Estadísticas del Partido</h2>
+                
+                <div class="estadisticas-container">
+                    <div class="estadistica">
+                        <h3>Posesión del Balón</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 52%"></div>
+                        </div>
+                        <p>Medanito FC: 52%</p>
+                        <p>Nova United: 48%</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Tiros al Arco</h3>
+                        <div class="barra-container">
+                            <div class="barra" style="width: 60%"></div>
+                        </div>
+                        <p>Medanito FC: 6 (3 a puerta)</p>
+                        <p>Nova United: 10 (5 a puerta)</p>
+                    </div>
+                    
+                    <div class="estadistica">
+                        <h3>Faltas Cometidas</h3>
+                
